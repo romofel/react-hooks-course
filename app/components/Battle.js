@@ -1,36 +1,35 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import Results from './Results'
-import { ThemeConsumer } from '../contexts/theme'
+import ThemeContext from '../contexts/theme'
 import { Link } from 'react-router-dom'
 
-function Instructions () {
+function Instructions() {
+  const theme = useContext(ThemeContext);
   return (
-    <ThemeConsumer>
-      {({ theme }) => (
-        <div className='instructions-container'>
-          <h1 className='center-text header-lg'>
-            Instructions
-          </h1>
-          <ol className='container-sm grid center-text battle-instructions'>
-            <li>
-              <h3 className='header-sm'>Enter two Github users</h3>
-              <FaUserFriends className={`bg-${theme}`} color='rgb(255, 191, 116)' size={140} />
-            </li>
-            <li>
-              <h3 className='header-sm'>Battle</h3>
-              <FaFighterJet className={`bg-${theme}`} color='#727272' size={140} />
-            </li>
-            <li>
-              <h3 className='header-sm'>See the winners</h3>
-              <FaTrophy className={`bg-${theme}`} color='rgb(255, 215, 0)' size={140} />
-            </li>
-          </ol>
-        </div>
-      )}
-    </ThemeConsumer>
-  )
+    <div className='instructions-container'>
+      <h1 className='center-text header-lg'>
+        Instructions
+      </h1>
+      <ol className='container-sm grid center-text battle-instructions'>
+        <li>
+          <h3 className='header-sm'>Enter two Github users</h3>
+          <FaUserFriends className={`bg-${theme}`} color='rgb(255, 191, 116)' size={140} />
+        </li>
+        <li>
+          <h3 className='header-sm'>Battle</h3>
+          <FaFighterJet className={`bg-${theme}`} color='#727272' size={140} />
+        </li>
+        <li>
+          <h3 className='header-sm'>See the winners</h3>
+          <FaTrophy className={`bg-${theme}`} color='rgb(255, 215, 0)' size={140} />
+        </li>
+      </ol>
+    </div>
+  );
+
+
 }
 
 class PlayerInput extends React.Component {
@@ -85,7 +84,7 @@ PlayerInput.propTypes = {
   label: PropTypes.string.isRequired
 }
 
-function PlayerPreview ({ username, onReset, label }) {
+function PlayerPreview({ username, onReset, label }) {
   return (
     <ThemeConsumer>
       {({ theme }) => (
@@ -101,7 +100,7 @@ function PlayerPreview ({ username, onReset, label }) {
               <a
                 href={`https://github.com/${username}`}
                 className='link'>
-                  {username}
+                {username}
               </a>
             </div>
             <button className='btn-clear flex-center' onClick={onReset}>
@@ -147,26 +146,26 @@ export default class Battle extends React.Component {
           <div className='row space-around'>
             {playerOne === null
               ? <PlayerInput
-                  label='Player One'
-                  onSubmit={(player) => this.handleSubmit('playerOne', player)}
-                />
+                label='Player One'
+                onSubmit={(player) => this.handleSubmit('playerOne', player)}
+              />
               : <PlayerPreview
-                  username={playerOne}
-                  label='Player One'
-                  onReset={() => this.handleReset('playerOne')}
-                />
+                username={playerOne}
+                label='Player One'
+                onReset={() => this.handleReset('playerOne')}
+              />
             }
 
             {playerTwo === null
               ? <PlayerInput
-                  label='Player Two'
-                  onSubmit={(player) => this.handleSubmit('playerTwo', player)}
-                />
+                label='Player Two'
+                onSubmit={(player) => this.handleSubmit('playerTwo', player)}
+              />
               : <PlayerPreview
-                  username={playerTwo}
-                  label='Player Two'
-                  onReset={() => this.handleReset('playerTwo')}
-                />
+                username={playerTwo}
+                label='Player Two'
+                onReset={() => this.handleReset('playerTwo')}
+              />
             }
           </div>
 
