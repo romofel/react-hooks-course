@@ -79,61 +79,50 @@ ReposGrid.propTypes = {
   repos: PropTypes.array.isRequired
 }
 
-export default class Popular extends React.Component {
-  state = {
-    selectedLanguage: 'All',
-    repos: {},
-    error: null,
-  }
-  componentDidMount () {
-    this.updateLanguage(this.state.selectedLanguage)
-  }
-  updateLanguage = (selectedLanguage) => {
-    this.setState({
-      selectedLanguage,
-      error: null,
-    })
+export default function Popular () {
+  const [language, setLanguage] = React.useState('All');
+  const [repos, setRepos] = React.useState({});
+  const [error, setError] = React.useState(null);
 
-    if (!this.state.repos[selectedLanguage]) {
-      fetchPopularRepos(selectedLanguage)
-        .then((data) => {
-          this.setState(({ repos }) => ({
-            repos: {
-              ...repos,
-              [selectedLanguage]: data
-            }
-          }))
-        })
-        .catch(() => {
-          console.warn('Error fetching repos: ', error)
+  React.useEffect(() => {
+    updateLanguage(language);
+  }, [language]);
 
-          this.setState({
-            error: `There was an error fetching the repositories.`
-          })
-        })
+  const updateLanguage = (selectedLanguage) => {
+    setLanguage(selectedLanguage);
+    setError(null);
+
+    if(!repos[language]) {
+      fetchPopularRepos(language).then(data => {
+        setRepos((repos) => ({
+          ...repos,
+          [language]: data,
+        }));
+      })
+      .catch(() => {
+        console.warn('Error fetching repos: ', error);
+
+        setError('There was an error fetching the repositories.');
+      });
     }
   }
-  isLoading = () => {
-    const { selectedLanguage, repos, error } = this.state
 
-    return !repos[selectedLanguage] && error === null
+  const isLoading = () => {
+    return !repos[language] && error === null;
   }
-  render() {
-    const { selectedLanguage, repos, error } = this.state
 
-    return (
-      <React.Fragment>
-        <LangaugesNav
-          selected={selectedLanguage}
-          onUpdateLanguage={this.updateLanguage}
-        />
+  return (
+    <React.Fragment>
+      <LangaugesNav
+        selected={language}
+        onUpdateLanguage={updateLanguage}
+      />
 
-        {this.isLoading() && <Loading text='Fetching Repos' />}
+      {isLoading() && <Loading text='Fetching Repos' />}
 
-        {error && <p className='center-text error'>{error}</p>}
+      {error && <p className='center-text error'>{error}</p>}
 
-        {repos[selectedLanguage] && <ReposGrid repos={repos[selectedLanguage]} />}
-      </React.Fragment>
-    )
-  }
+      {repos[language] && <ReposGrid repos={repos[language]} />}
+    </React.Fragment>
+  );
 }
