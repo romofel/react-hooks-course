@@ -12,7 +12,7 @@ const Results = React.lazy(() => import('./components/Results'))
 
 class App extends React.Component {
   state = {
-    theme: 'dark',
+    theme: 'light',
     toggleTheme: () => {
       this.setState(({ theme }) => ({
         theme: theme === 'light' ? 'dark' : 'light'
