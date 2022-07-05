@@ -80,7 +80,7 @@ PlayerInput.propTypes = {
 
 function PlayerPreview({ username, onReset, label }) {
   const theme = useContext(ThemeContext);
-  
+
   return (
     <div className='column player'>
       <h3 className='player-label'>{label}</h3>
@@ -111,70 +111,74 @@ PlayerPreview.propTypes = {
   label: PropTypes.string.isRequired
 }
 
-export default class Battle extends React.Component {
-  state = {
+export default function () {
+  const [state, setState] = useState({
     playerOne: null,
     playerTwo: null,
-  }
-  handleSubmit = (id, player) => {
-    this.setState({
+  });
+
+
+  const handleSubmit = (id, player) => {
+    setState((state) => ({
+      ...state,
       [id]: player
-    })
-  }
-  handleReset = (id) => {
-    this.setState({
+    }));
+  };
+
+  const handleReset = (id) => {
+    setState((state) => ({
+      ...state,
       [id]: null
-    })
-  }
-  render() {
-    const { playerOne, playerTwo } = this.state
+    }))
+  };
 
-    return (
-      <React.Fragment>
-        <Instructions />
+  const { playerOne, playerTwo } = state;
 
-        <div className='players-container'>
-          <h1 className='center-text header-lg'>Players</h1>
-          <div className='row space-around'>
-            {playerOne === null
-              ? <PlayerInput
-                label='Player One'
-                onSubmit={(player) => this.handleSubmit('playerOne', player)}
-              />
-              : <PlayerPreview
-                username={playerOne}
-                label='Player One'
-                onReset={() => this.handleReset('playerOne')}
-              />
-            }
+  return (
+    <React.Fragment>
+      <Instructions />
 
-            {playerTwo === null
-              ? <PlayerInput
-                label='Player Two'
-                onSubmit={(player) => this.handleSubmit('playerTwo', player)}
-              />
-              : <PlayerPreview
-                username={playerTwo}
-                label='Player Two'
-                onReset={() => this.handleReset('playerTwo')}
-              />
-            }
-          </div>
+      <div className='players-container'>
+        <h1 className='center-text header-lg'>Players</h1>
+        <div className='row space-around'>
+          {playerOne === null
+            ? <PlayerInput
+              label='Player One'
+              onSubmit={(player) => handleSubmit('playerOne', player)}
+            />
+            : <PlayerPreview
+              username={playerOne}
+              label='Player One'
+              onReset={() => handleReset('playerOne')}
+            />
+          }
 
-
-          {playerOne && playerTwo && (
-            <Link
-              className='btn dark-btn btn-space'
-              to={{
-                pathname: '/battle/results',
-                search: `?playerOne=${playerOne}&playerTwo=${playerTwo}`
-              }}
-            >
-              Battle
-            </Link>
-          )}
+          {playerTwo === null
+            ? <PlayerInput
+              label='Player Two'
+              onSubmit={(player) => handleSubmit('playerTwo', player)}
+            />
+            : <PlayerPreview
+              username={playerTwo}
+              label='Player Two'
+              onReset={() => handleReset('playerTwo')}
+            />
+          }
         </div>
-      </React.Fragment>
-    )
-  }
+
+
+        {playerOne && playerTwo && (
+          <Link
+            className='btn dark-btn btn-space'
+            to={{
+              pathname: '/battle/results',
+              search: `?playerOne=${playerOne}&playerTwo=${playerTwo}`
+            }}
+          >
+            Battle
+          </Link>
+        )}
+      </div>
+    </React.Fragment>
+  )
 }
