@@ -26,11 +26,13 @@ export default function Loading ({ text, speed }) {
     }, speed);
 
     return clear;
-  }, []);
+  }, [text, speed]);
 
+  /*
   useEffect(() => {
     content === text + '...' && clear();
   });
+  */
 
   return (
     <p style={styles.content}>
