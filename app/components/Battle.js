@@ -39,7 +39,7 @@ function PlayerInput({ label, onSubmit }) {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    onSubmit(this.state.username)
+    onSubmit(username)
   }
 
   const handleChange = (event) => {
